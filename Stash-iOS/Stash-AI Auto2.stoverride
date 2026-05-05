@@ -1,0 +1,229 @@
+name: AI分流（Claude｜OpenAI｜Gemini｜Apple Push）
+desc: Claude-MY优先；OpenAI JP→SG→US；Gemini JP→HK→SG→US；Apple Push代理优化
+
+proxy-groups:
+
+# =========================
+# 🇲🇾 马来西亚节点池（Claude 主线路）
+# =========================
+- name: 🇲🇾 MY-CLEAN
+  type: fallback
+  lazy: true
+  interval: 600
+  timeout: 5000
+  include-all: true
+
+  filter: "(?i)(马来西亚|Malaysia|MY|吉隆坡|Kuala Lumpur|KL)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+
+  url: https://claude.ai/api/organizations
+
+
+# =========================
+# 🇸🇬 新加坡节点池
+# =========================
+- name: 🇸🇬 SG-CLEAN
+  type: url-test
+  lazy: true
+  interval: 300
+  tolerance: 120
+  timeout: 5000
+  include-all: true
+
+  filter: "(?i)(新加坡|Singapore|SG|狮城)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+
+  url: https://ios.chat.openai.com/
+
+
+# =========================
+# 🇯🇵 日本节点池
+# =========================
+- name: 🇯🇵 JP-CLEAN
+  type: url-test
+  lazy: true
+  interval: 300
+  tolerance: 120
+  timeout: 5000
+  include-all: true
+
+  filter: "(?i)(日本|Japan|JP|东京|Tokyo|大阪|Osaka)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+
+  url: https://gemini.google.com/
+
+
+# =========================
+# 🇭🇰 香港节点池
+# =========================
+- name: 🇭🇰 HK-CLEAN
+  type: url-test
+  lazy: true
+  interval: 300
+  tolerance: 120
+  timeout: 5000
+  include-all: true
+
+  filter: "(?i)(香港|Hong Kong|HongKong|HK)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+
+  url: https://gemini.google.com/
+
+
+# =========================
+# 🇺🇸 美国节点池
+# =========================
+- name: 🇺🇸 US-CLEAN
+  type: url-test
+  lazy: true
+  interval: 300
+  tolerance: 150
+  timeout: 5000
+  include-all: true
+
+  filter: "(?i)(美国|United States|USA|US|洛杉矶|Los Angeles|San Jose|硅谷|西雅图|Seattle)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+
+  url: https://gemini.google.com/
+
+
+# =========================
+# 🤖 Claude 自动故障切换
+# =========================
+- name: 🤖 CLAUDE-AUTO
+  type: fallback
+  lazy: true
+  interval: 300
+  timeout: 5000
+
+  url: https://claude.ai/api/organizations
+
+  proxies:
+    - 🇲🇾 MY-CLEAN
+    - 🇸🇬 SG-CLEAN
+
+
+# =========================
+# 🤖 OpenAI 亚洲优先
+# =========================
+- name: 🤖 OPENAI-AUTO
+  type: url-test
+  lazy: true
+  interval: 180
+  tolerance: 150
+
+  url: https://ios.chat.openai.com/
+
+  proxies:
+    - 🇯🇵 JP-CLEAN
+    - 🇸🇬 SG-CLEAN
+    - 🇺🇸 US-CLEAN
+
+
+# =========================
+# ✨ Gemini 亚洲优先
+# =========================
+- name: ✨ GEMINI-AUTO
+  type: url-test
+  lazy: true
+  interval: 180
+  tolerance: 150
+
+  url: https://gemini.google.com/
+
+  proxies:
+    - 🇯🇵 JP-CLEAN
+    - 🇭🇰 HK-CLEAN
+    - 🇸🇬 SG-CLEAN
+    - 🇺🇸 US-CLEAN
+
+
+rules:
+
+# =========================
+# Apple Push 代理
+# =========================
+- DOMAIN-SUFFIX,push.apple.com,🇯🇵 JP-CLEAN
+
+
+# =========================
+# Google / Firebase
+# =========================
+- DOMAIN-SUFFIX,app-analytics-services.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,app-measurement.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,firebase-settings.crashlytics.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,firebaselogging.googleapis.com,🇸🇬 SG-CLEAN
+
+
+# =========================
+# OpenAI 主域
+# =========================
+- DOMAIN-SUFFIX,openai.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,chatgpt.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,chat.com,🤖 OPENAI-AUTO
+
+
+# =========================
+# OpenAI 静态资源
+# =========================
+- DOMAIN-SUFFIX,oaistatic.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,oaiusercontent.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,openaiusercontent.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,cdn.openai.com,🤖 OPENAI-AUTO
+
+
+# =========================
+# OpenAI 登录 / 安全
+# =========================
+- DOMAIN-SUFFIX,auth0.com,🤖 OPENAI-AUTO
+- DOMAIN-SUFFIX,identrust.com,🤖 OPENAI-AUTO
+
+
+# =========================
+# OpenAI telemetry
+# =========================
+- DOMAIN-SUFFIX,statsigapi.net,🤖 OPENAI-AUTO
+- DOMAIN-KEYWORD,statsig,🤖 OPENAI-AUTO
+
+
+# =========================
+# Claude 主域
+# =========================
+- DOMAIN-SUFFIX,anthropic.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,claude.ai,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,claude.com,🤖 CLAUDE-AUTO
+
+
+# =========================
+# Claude 静态资源
+# =========================
+- DOMAIN-SUFFIX,claudeusercontent.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,anthropicusercontent.com,🤖 CLAUDE-AUTO
+
+
+# =========================
+# Claude telemetry / 风控
+# =========================
+- DOMAIN-SUFFIX,intercom.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,intercomcdn.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,sift.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,siftscience.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,segment.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,segment.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadoghq.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadog.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadoghq-browser-agent.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,featuregates.org,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,sentry.io,🤖 CLAUDE-AUTO
+- DOMAIN-KEYWORD,datadog,🤖 CLAUDE-AUTO
+
+
+# =========================
+# Gemini / Google AI
+# =========================
+- DOMAIN-SUFFIX,gemini.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,ai.google.dev,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,aistudio.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,makersuite.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,vertexai.googleapis.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,clients6.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,proactive.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,bard.google.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,deepmind.com,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,deepmind.google,✨ GEMINI-AUTO
