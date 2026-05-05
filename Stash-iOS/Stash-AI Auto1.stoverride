@@ -1,0 +1,107 @@
+name: AI分流（Claude→MY优先｜OpenAI→SG最快）
+desc: Claude默认马来西亚失败自动切新加坡；新加坡使用时测速；其它流量保持机场默认策略
+
+proxy-groups:
+
+# 🇲🇾 马来西亚节点池（Claude 主线路）
+- name: 🇲🇾 MY-CLEAN
+  type: fallback
+  lazy: true
+  include-all: true
+  filter: "(?i)(马来西亚|Malaysia|MY|吉隆坡|Kuala Lumpur|KL)(?!.*(试用|Trial|体验|测试|Beta|Free|限\\s?\\d+|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
+  url: https://claude.ai
+
+
+# 🇸🇬 新加坡节点池（OpenAI 专用测速）
+- name: 🇸🇬 SG-CLEAN
+  type: url-test
+  lazy: true
+  tolerance: 120
+  include-all: true
+  filter: "(?i)(新加坡|Singapore|SG|狮城)(?!.*(试用|Trial|体验|测试|Beta|Free|限\\s?\\d+|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
+  url: https://chat.openai.com/cdn-cgi/trace
+
+
+# 🤖 Claude 自动切换策略（MY → SG）
+- name: 🤖 CLAUDE-AUTO
+  type: fallback
+  lazy: true
+  url: https://claude.ai
+  proxies:
+    - 🇲🇾 MY-CLEAN
+    - 🇸🇬 SG-CLEAN
+
+
+# 🤖 OpenAI 新加坡最快节点策略
+- name: 🤖 OPENAI-SG
+  type: url-test
+  lazy: true
+  tolerance: 250
+  url: https://chat.openai.com/cdn-cgi/trace
+  proxies:
+    - 🇸🇬 SG-CLEAN
+
+
+rules:
+
+# ===== Google / Firebase（最高优先级）=====
+- DOMAIN-SUFFIX,app-analytics-services.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,app-measurement.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,firebase-settings.crashlytics.com,🇸🇬 SG-CLEAN
+- DOMAIN-SUFFIX,firebaselogging.googleapis.com,🇸🇬 SG-CLEAN
+
+
+# ===== 自定义补漏（跟随机场默认出口）=====
+# - DOMAIN-SUFFIX,gaymaletube.com,MATCH
+# - DOMAIN-SUFFIX,anygay.com,MATCH
+# - DOMAIN-SUFFIX,kinkmen.com,MATCH
+# - DOMAIN-SUFFIX,kink.com,MATCH
+
+
+# ===== OpenAI 主域 =====
+- DOMAIN-SUFFIX,openai.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,chatgpt.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,chat.com,🤖 OPENAI-SG
+
+
+# ===== OpenAI 静态资源 =====
+- DOMAIN-SUFFIX,oaistatic.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,oaiusercontent.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,openaiusercontent.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,cdn.openai.com,🤖 OPENAI-SG
+
+
+# ===== OpenAI 登录 / 安全 =====
+- DOMAIN-SUFFIX,auth0.com,🤖 OPENAI-SG
+- DOMAIN-SUFFIX,identrust.com,🤖 OPENAI-SG
+
+
+# ===== OpenAI telemetry =====
+- DOMAIN-SUFFIX,statsigapi.net,🤖 OPENAI-SG
+- DOMAIN-KEYWORD,statsig,🤖 OPENAI-SG
+
+
+# ===== Claude 主域 =====
+- DOMAIN-SUFFIX,anthropic.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,claude.ai,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,claude.com,🤖 CLAUDE-AUTO
+
+
+# ===== Claude 静态资源 =====
+- DOMAIN-SUFFIX,claudeusercontent.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,anthropicusercontent.com,🤖 CLAUDE-AUTO
+
+
+# ===== Claude telemetry / 风控 / 日志 =====
+- DOMAIN-SUFFIX,intercom.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,intercomcdn.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,sift.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,siftscience.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,segment.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,segment.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadoghq.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadog.io,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,datadoghq-browser-agent.com,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,featuregates.org,🤖 CLAUDE-AUTO
+- DOMAIN-SUFFIX,sentry.io,🤖 CLAUDE-AUTO
+- DOMAIN-KEYWORD,datadog,🤖 CLAUDE-AUTO
