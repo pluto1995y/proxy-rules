@@ -29,7 +29,7 @@ proxy-groups:
   timeout: 5000
   include-all: true
 
-  filter: "(?i)(新加坡|Singapore|SG|狮城)(?!.*(试用|Trial|体验|测试|Beta|Free|Expire|到期|套餐|官网|客服|流量|重置|限速|0\\.\\d+x?|倍率))"
+  filter: "(?i)(新加坡|Singapore|SG|狮城)(?!.*(试用|Trial|体验|测试|Test|Beta|Free|免费|Expire|到期|套餐|官网|客服|流量|重置|限速|限量|限时|限制|倍率|群组|邀请|售后|维护|公告|订阅|过期|剩余|重置日|工单|客服|官网|失联|0\\.\\d+x?|\\d+\\.\\d+x?))"
 
   url: https://ios.chat.openai.com/
 
