@@ -61,7 +61,7 @@ proxy-groups:
   timeout: 5000
   include-all: true
 
-  filter: "(?i)(香港|Hong Kong|HongKong|HK)(?!.*(试用|Trial|体验|测试|Beta|Free|直连|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
+  filter: "(?i)(香港|Hong Kong|HongKong|HK)(?!.*(.*直连.*|试用|Trial|体验|测试|Beta|Free|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
 
   url: https://gemini.google.com/
 
