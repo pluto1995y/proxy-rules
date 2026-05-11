@@ -10,7 +10,7 @@ proxy-groups:
   type: fallback
   lazy: true
   interval: 600
-  timeout: 5000
+  timeout: 3500
   include-all: true
 
   filter: "(?i)(马来西亚|Malaysia|MY|吉隆坡|Kuala Lumpur|KL)(?!.*(试用|Trial|体验|测试|Beta|Free|直连|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
