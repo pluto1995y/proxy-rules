@@ -26,7 +26,7 @@ proxy-groups:
   lazy: true
   interval: 600
   tolerance: 120
-  timeout: 5000
+  timeout: 2500
   include-all: true
 
   filter: "(?i)(新加坡|Singapore|SG|狮城)(?!.*(试用|Trial|体验|测试|Beta|Free|限\\s?\\d+|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
@@ -42,7 +42,7 @@ proxy-groups:
   lazy: true
   interval: 600
   tolerance: 120
-  timeout: 5000
+  timeout: 2500
   include-all: true
 
   filter: "(?i)(日本|Japan|JP|东京|Tokyo|大阪|Osaka)(?!.*(试用|Trial|体验|测试|Beta|Free|直连|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
@@ -58,7 +58,7 @@ proxy-groups:
   lazy: true
   interval: 600
   tolerance: 120
-  timeout: 5000
+  timeout: 2500
   include-all: true
 
   filter: "(?i)(香港|Hong Kong|HongKong|HK)(?!.*(.*直连.*|试用|Trial|体验|测试|Beta|Free|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
@@ -74,7 +74,7 @@ proxy-groups:
   lazy: true
   interval: 600
   tolerance: 150
-  timeout: 5000
+  timeout: 3000
   include-all: true
 
   filter: "(?i)(美国|USA|US|United States|洛杉矶|Los Angeles|San Jose|西雅图|Seattle)(?!.*(试用|Trial|体验|测试|Beta|Free|直连|限\\s?\\d+|公益|福利|轻量|低倍率|倍率|0\\.\\d+x?|\\d+\\.\\d+x?|([\\[【]?\\s*0[\\.．]\\d+x?\\s*[\\]】]?)))"
@@ -89,7 +89,7 @@ proxy-groups:
   type: fallback
   lazy: true
   interval: 900
-  timeout: 5000
+  timeout: 2500
 
   url: https://claude.ai/api/organizations
 
@@ -118,7 +118,7 @@ proxy-groups:
 # =========================
 # ✨ Gemini 亚洲优先
 # =========================
-- name: ✨ GEMINI-AUTO
+- name: ✨ Gemini-Auto
   type: url-test
   lazy: true
   interval: 900
@@ -217,14 +217,14 @@ rules:
 # =========================
 # Gemini / Google AI
 # =========================
-- DOMAIN-SUFFIX,gemini.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,ai.google.dev,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,aistudio.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,makersuite.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,vertexai.googleapis.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,clients6.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,generativelanguage.googleapis.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,proactive.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,bard.google.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,deepmind.com,✨ GEMINI-AUTO
-- DOMAIN-SUFFIX,deepmind.google,✨ GEMINI-AUTO
+- DOMAIN-SUFFIX,gemini.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,ai.google.dev,✨ Gemini-Auto
+- DOMAIN-SUFFIX,aistudio.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,makersuite.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,vertexai.googleapis.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,clients6.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,proactive.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,bard.google.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,deepmind.com,✨ Gemini-Auto
+- DOMAIN-SUFFIX,deepmind.google,✨ Gemini-Auto
